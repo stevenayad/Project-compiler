@@ -1,0 +1,1 @@
+Plus Minus  Mult  Div  LParen RParen Number e 

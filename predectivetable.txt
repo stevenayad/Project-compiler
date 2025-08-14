@@ -1,0 +1,16 @@
+E   Number     T E'
+E   LParen     T E'
+E'  Plus       Plus T E'
+E'  Minus      Minus T E'
+E'  RParen     e
+E'  $          e
+T   Number     F T'
+T   LParen     F T'
+T'  Mult       Mult F T'
+T'  Div        Div F T'
+T'  Plus       e
+T'  Minus      e
+T'  RParen     e
+T'  $          e
+F   Number     Number
+F   LParen     LParen E RParen
