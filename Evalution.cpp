@@ -1,14 +1,8 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <map>
 #include <stack>
-#include <vector>
-#include <set>
-#include <cctype>
-#include <stdexcept>
+#include <string>
 using namespace std;
+
 enum operations {
     PLUS = 1,
     MINUS = 1,
@@ -21,7 +15,7 @@ enum operations {
 class ExpressionConverter {
 private:
     stack<char> operators;
-    stack<double> cal;   
+    stack<double> cal;
     string result;
 
     int getOperationPriority(char op) {
@@ -32,49 +26,77 @@ private:
         case '/': return DIVIDE;
         case '(': return OPEN_PAREN;
         case ')': return CLOSE_PAREN;
-        default:  return -1;
+        default:
+            cout << "Unknown operator: " << op << endl;
+            return -1;
         }
     }
 
-
-    bool parseDouble(const string& s, double& out) {
-        std::istringstream iss(s);
-        iss >> out;
-        return iss && iss.eof();
-    }
-
 public:
-  
-    string infixToPostfix(const string& str) {
-        while (!operators.empty()) operators.pop();
-        result = "";
+    double Evalation(string str) {
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str[i];
+            if (isdigit(ch) || ch == '.') {
+                string numStr = "";
+                while (i < str.length() && (isdigit(str[i]) || str[i] == '.')) {
+                    numStr += str[i];
+                    i++;
+                }
+                double num = stod(numStr);
+                cal.push(num);
+                i--;
+            }
+            else if (ch == '+') {
+                double num1 = cal.top();
+                cal.pop();
+                double num2 = cal.top();
+                cal.pop();
+                double re = num2 + num1;
+                cal.push(re);
+            }
+            else if (ch == '-') {
+                double num1 = cal.top();
+                cal.pop();
+                double num2 = cal.top();
+                cal.pop();
+                double re = num2 - num1;
+                cal.push(re);
+            }
+            else if (ch == '/') {
+                try {
+                    double num1 = cal.top(); cal.pop();
+                    double num2 = cal.top(); cal.pop();
 
-        for (int i = 0; i < (int)str.length(); i++) {
+                    double re = num2 / num1;
+                    cal.push(re);
+                }
+                catch (const exception& e) {
+                    cout << "Error during division: Division by zero is not allowed" << endl;
+                }
+            }
+            else if (ch == '*') {
+                double num1 = cal.top();
+                cal.pop();
+                double num2 = cal.top();
+                cal.pop();
+                double re = num1 * num2;
+                cal.push(re);
+            }
+        }
+        return cal.top();
+    }
+    string infixToPostfix(string str) {
+        result = "";
+        for (int i = 0; i < str.length(); i++) {
             char ch = str[i];
 
-            if (isspace((unsigned char)ch)) continue;
-
-            if (isdigit((unsigned char)ch) || ch == '.') {
-                string number;
-                bool hasDot = (ch == '.');
-                number += ch;
-                i++;
-                while (i < (int)str.length()) {
-                    char d = str[i];
-                    if (isdigit((unsigned char)d)) {
-                        number += d;
-                        i++;
-                    } else if (d == '.' && !hasDot) {
-                        hasDot = true;
-                        number += d;
-                        i++;
-                    } else {
-                        break;
-                    }
+            if (isdigit(ch) || ch == '.') {
+                while (i < str.length() && (isdigit(str[i]) || str[i] == '.')) {
+                    result += str[i];
+                    i++;
                 }
-                result += number;
                 result += ' ';
-                i--; 
+                i--;
             }
             else if (ch == '(') {
                 operators.push(ch);
@@ -85,60 +107,43 @@ public:
                     result += ' ';
                     operators.pop();
                 }
-                if (!operators.empty() && operators.top() == '(') operators.pop();
+                if (!operators.empty()) operators.pop();
             }
             else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-                while (!operators.empty() &&
-                       operators.top() != '(' &&
-                       getOperationPriority(ch) <= getOperationPriority(operators.top())) {
+                while (!operators.empty() && getOperationPriority(ch) <= getOperationPriority(operators.top())) {
                     result += operators.top();
                     result += ' ';
                     operators.pop();
                 }
                 operators.push(ch);
             }
-            else {
-            
-            }
         }
         while (!operators.empty()) {
-            if (operators.top() != '(') {
-                result += operators.top();
-                result += ' ';
-            }
+            result += ' ';
+            result += operators.top();
             operators.pop();
         }
+
         return result;
     }
-
-  
-    double Evalation(const string& postfix) {
-        while (!cal.empty()) cal.pop();
-        istringstream ss(postfix);
-        string token;
-
-        while (ss >> token) {
-          
-            double val;
-            if (parseDouble(token, val)) {
-                cal.push(val);
-            } else if (token == "+" || token == "-" || token == "*" || token == "/") {
-                if (cal.size() < 2) throw runtime_error("Invalid postfix expression");
-                double b = cal.top(); cal.pop();
-                double a = cal.top(); cal.pop();
-                if (token == "+") cal.push(a + b);
-                else if (token == "-") cal.push(a - b);
-                else if (token == "*") cal.push(a * b);
-                else if (token == "/") {
-                    if (b == 0.0) throw runtime_error("Division by zero");
-                    cal.push(a / b);
-                }
-            } else {
-         
-                throw runtime_error("Unknown token in postfix: " + token);
-            }
-        }
-        if (cal.empty()) throw runtime_error("Empty evaluation stack");
-        return cal.top();
-    }
 };
+//int main() {
+//    ExpressionConverter converter;
+//
+//    ////Example 1
+//    //string infix1 = "10.2*(2.3+1.5+5.6)/2-1";
+//    //string postfix1 = converter.infixToPostfix(infix1);
+//    //double result = converter.Evalation(postfix1);
+//    //cout << "Infix: " << infix1 << endl;
+//    //cout << "Postfix: " << postfix1 << endl;
+//    //cout << "Result: " << result;
+//    //cout << endl;
+//    //Example2
+//    /*string infix2 = "2+((8+2*3)/2)-1";
+//    string postfix2 = converter.infixToPostfix(infix2);
+//    int result2 = converter.Evalation(postfix2);
+//    cout << "Infix: " << infix2 << endl;
+//    cout << "Postfix: " << postfix2 << endl;
+//    cout << "Result: " << result2;*/
+//    return 0;
+//}
