@@ -10,11 +10,53 @@ using namespace std;
 class parser {
 private:
     map<string, map<string, string> > predictiveTable;
+    map<string , vector<string>> grammar;
     stack<string> inputtoken;
     set<string> tremails;
     set<string> nontremails;
 
 public:
+
+    void ReadGrammar(const string& filename) {
+        ifstream infile(filename);
+        string line;
+
+        while (getline(infile, line)) {
+            int pos = line.find("->");
+            string lhs = line.substr(0, pos);
+            nontremails.insert(lhs);
+            string rhs = line.substr(pos + 2);
+            stringstream ss(rhs);
+            string prod;
+
+            while (getline(ss, prod, '|')) {
+                grammar[lhs].push_back(prod);
+            }
+        }
+    }
+   void ExtractTerminals() {
+      for (map<string, vector<string> >::iterator it = grammar.begin(); it != grammar.end(); ++it) {
+        vector<string> productions = it->second;
+
+        for (int i = 0; i < (int)productions.size(); i++) {
+            string prod = productions[i];
+            stringstream ss(prod);
+            string sym;
+
+            while (ss >> sym) {
+                if (nontremails.find(sym) == nontremails.end()) {
+                    tremails.insert(sym);
+                }
+            }
+        }
+     }
+  }
+
+     
+  
+
+
+
     bool isTremails(const string& s) {
         return tremails.count(s) > 0;
     }
@@ -23,7 +65,7 @@ public:
         return nontremails.count(s) > 0;
     }
 
-    void loadTremails(const string& filename) {
+    /*void loadTremails(const string& filename) {
         ifstream file(filename.c_str());
         if (!file.is_open()) {
             cerr << "Error: Could not open " << filename << endl;
@@ -41,7 +83,7 @@ public:
         while (file >> word) {
             nontremails.insert(word);
         }
-    }
+    }*/
 
     void loadpredectivetable(const string& filename) {
         ifstream inputfile(filename);

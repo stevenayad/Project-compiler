@@ -1,5 +1,5 @@
-E  → T E'
-E' → Plus T E' | Minus T E' | e
-T  → F T'
-T' → Mult F T' | Div F T' | F T'  |e
-F  → Number | LParen E RParen
+E->T E'
+E'->Plus T E'|Minus T E'| e
+T->F T'
+T'->Mult F T' |Div F T' |F T'|e
+F->Number|LParen E RParen

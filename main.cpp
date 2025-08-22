@@ -36,11 +36,11 @@ int main() {
 
    
     parser p;
-    p.loadTremails("termails.txt");
-    p.loadnonTremails("nontermails.txt");
+    p.ReadGrammar("grammer.txt");
+    p.ExtractTerminals();
+    p.printSymbols(); 
     p.loadTokens("tokens.txt");
     p.loadpredectivetable("predectivetable.txt");
-
     bool success = p.parse("E");
 
     if (success) {
