@@ -10,12 +10,15 @@ using namespace std;
 int main() {
     ifstream in("input.txt");
     ofstream tok("tokens.txt");
+    ofstream output("output.txt");
 
     if (!in || !tok) {
         cout << "Error opening files Scanner.\n";
+        output<<"Error opening files Scanner.\n";
         return 1;
     } else {
         cout << "Files open successfully Scanner.\n";
+        output<<"Files open successfully Scanner.\n";
     }
 
     
@@ -42,7 +45,7 @@ int main() {
 
     if (success) {
         cout << "Parsing successful" << endl;
-
+        output<<"Parsing successful" << endl;
         ExpressionConverter conv;
 
         
@@ -52,8 +55,10 @@ int main() {
         try {
             double value = conv.Evalation(postfix);
             cout << "Evaluation Result = " << value << endl;
+            output<< "Evaluation Result = " << value << endl;
         } catch (const exception &e) {
-            cerr << "Evaluation error: " << e.what() << endl;
+            cout << "Evaluation error: " << e.what() << endl;
+            output << "Evaluation error: " << e.what() << endl;
         }
     } else {
         cout << "Parsing failed. Skipping postfix conversion and evaluation." << endl;
