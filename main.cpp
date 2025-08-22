@@ -37,14 +37,12 @@ int main() {
     p.loadnonTremails("nontermails.txt");
     p.loadTokens("tokens.txt");
     p.loadpredectivetable("predectivetable.txt");
-
+    
     bool success = p.parse("E");
 
     if (success) {
         ExpressionConverter conv;
         string postfix = conv.infixToPostfix(expression);
-        
-
         try {
             double value = conv.Evalation(postfix);
             cout << "Evaluation: " << value << endl;
@@ -53,7 +51,7 @@ int main() {
         }
     }
     else {
-        cout << "Skipping postfix conversion and evaluation because parsing failed." << endl;
+       cout << "Skipping postfix conversion and evaluation because parsing failed." << endl;
     }
 
     

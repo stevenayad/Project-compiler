@@ -75,7 +75,7 @@ public:
         }
 
         inputtoken.push("$");
-        for (int i = (int)tempTokens.size() - 1; i >= 0; --i) {
+        for (int i = tempTokens.size() - 1; i >= 0; --i) {
             inputtoken.push(tempTokens[i]);
         }
     }
@@ -109,7 +109,7 @@ public:
                         while (ss >> sym) {
                             symbols.push_back(sym);
                         }
-                        for (int j = (int)symbols.size() - 1; j >= 0; j--) {
+                        for (int j = symbols.size() - 1; j >= 0; j--) {
                             inputstack.push(symbols[j]);
                         }
                     }
