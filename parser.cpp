@@ -95,8 +95,7 @@ public:
             string currentInput = inputtoken.top();
 
             if (isnonTremails(topStack)) {
-                if (predictiveTable[topStack].count(currentInput) &&
-                    !predictiveTable[topStack][currentInput].empty()) {
+                if (!predictiveTable[topStack][currentInput].empty()) {
 
                     inputstack.pop();
                     string production = predictiveTable[topStack][currentInput];
@@ -144,9 +143,6 @@ public:
 
         if (inputtoken.size() > 1 || inputtoken.top() != "$") {
             cout << "Parsing failed: Extra input remaining" << endl;
-        }
-        else {
-            cout << "Parsing failed" << endl;
         }
         return false;
     }
