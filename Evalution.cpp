@@ -91,6 +91,14 @@ public:
             char ch = str[i];
 
             if (isdigit(ch) || ch == '.') {
+                if (i > 0 && (isdigit(str[i - 1]) || str[i - 1] == ')')) {
+                    while (!operators.empty() && getOperationPriority('*') <= getOperationPriority(operators.top())) {
+                        result += operators.top();
+                        result += ' ';
+                        operators.pop();
+                    }
+                    operators.push('*');
+                }
                 while (i < str.length() && (isdigit(str[i]) || str[i] == '.')) {
                     result += str[i];
                     i++;
@@ -138,7 +146,16 @@ public:
 //int main() {
 //    ExpressionConverter converter;
 //
-    ////Example 1
+ //////Example 1
+ //   string infix1 = "(4*(1+2)(4))3(1+1)";
+ //   string postfix1 = converter.infixToPostfix(infix1);
+ //   double result = converter.Evalation(postfix1);
+ //   cout << "Infix: " << infix1 << endl;
+ //   cout << "Postfix: " << postfix1 << endl;
+ //   cout << "Result: " << result;
+ //   cout << endl;
+    
+    ////Example 2
     //string infix1 = "10.2*(2.3+1.5+5.6)(2*3)";
     //string postfix1 = converter.infixToPostfix(infix1);
     //double result = converter.Evalation(postfix1);
@@ -146,7 +163,8 @@ public:
     //cout << "Postfix: " << postfix1 << endl;
     //cout << "Result: " << result;
     //cout << endl;
-//    //Example2
+    
+//    //Example3
 //    /*string infix2 = "2+((8+2*3)/2)-1";
 //    string postfix2 = converter.infixToPostfix(infix2);
 //    int result2 = converter.Evalation(postfix2);
