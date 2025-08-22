@@ -8,6 +8,8 @@ T   Number     F T'
 T   LParen     F T'
 T'  Mult       Mult F T'
 T'  Div        Div F T'
+T'  LParen     F T'
+T'  Number     F T'
 T'  Plus       e
 T'  Minus      e
 T'  RParen     e

@@ -36,7 +36,7 @@ public:
     }
 
     void loadnonTremails(const string& filename) {
-        ifstream file(filename.c_str());
+        ifstream file(filename);
         string word;
         while (file >> word) {
             nontremails.insert(word);
@@ -44,7 +44,7 @@ public:
     }
 
     void loadpredectivetable(const string& filename) {
-        ifstream inputfile(filename.c_str());
+        ifstream inputfile(filename);
         string line;
         while (getline(inputfile, line)) {
             if (line.empty()) continue;
