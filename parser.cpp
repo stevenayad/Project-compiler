@@ -87,7 +87,7 @@ public:
 
         while (!inputstack.empty()) {
             if (inputtoken.empty()) {
-                cout << "Parsing failed: input exhausted unexpectedly" << endl;
+                cout << "Parsing failed: input empty" << endl;
                 return false;
             }
 
